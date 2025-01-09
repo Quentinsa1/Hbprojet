@@ -1,4 +1,4 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 
 @section('title', 'Dashboard')
 
@@ -18,4 +18,7 @@
         </div>
     </div>
 </div>
-@endsection
+@endsection --}}
+<div>
+    {{ auth()->user()->email }}
+</div>

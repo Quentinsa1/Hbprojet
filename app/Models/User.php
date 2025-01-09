@@ -102,4 +102,23 @@ class User extends Authenticatable
     {
         return $this->hasMany(DistributorPurchase::class);
     }
+    public function isAdmin()
+    {
+        return $this->hasRole('admin');
+    }
+
+    public function isDistributor()
+    {
+        return $this->hasRole('distributor');
+    }
+
+    public function isStockist()
+    {
+        return $this->hasRole('stockist');
+    }
+
+    public function hasRole($roleName)
+    {
+        return $this->role->name === $roleName;
+    }
 }

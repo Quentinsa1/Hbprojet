@@ -33,13 +33,24 @@ class AuthenticatedSessionController extends Controller
         if (Auth::attempt($request->only('email', 'password'))) {
             $user = Auth::user();
 
-            // Si l'utilisateur a le rôle 'admin', redirige vers le tableau de bord admin
-            if ($user->role && $user->role->name == 'admin') {
-                return redirect()->route('admin.dashboard');
+            if ($user->status !== 'active') {
+                auth()->logout();
+                return redirect()->back()
+                    ->withInput($request->only('email'))
+                    ->withErrors(['email' => 'Your account is not active.']);
             }
 
-            // Sinon, redirige vers le tableau de bord par défaut
-            return redirect()->route('Admin.dashboard');
+            // Redirect based on role
+            switch ($user->role->name) {
+                case 'admin':
+                    return redirect()->route('admin.dashboard');
+                case 'distributor':
+                    return redirect()->route('distributor.dashboard');
+                case 'stockist':
+                    return redirect()->route('stockist.dashboard');
+                default:
+                    return redirect()->route(RouteServiceProvider::HOME);
+            }
         }
 
         return back()->withErrors([
