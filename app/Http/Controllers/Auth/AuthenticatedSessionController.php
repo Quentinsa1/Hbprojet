@@ -39,7 +39,7 @@ class AuthenticatedSessionController extends Controller
                     ->withInput($request->only('email'))
                     ->withErrors(['email' => 'Your account is not active.']);
             }
-
+dd('s');
             // Redirect based on role
             switch ($user->role->name) {
                 case 'admin':
